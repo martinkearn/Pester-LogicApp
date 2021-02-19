@@ -1,0 +1,95 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_LogicAppIntTest_name": {
+            "defaultValue": "LogicAppIntTest",
+            "type": "String"
+        },
+        "connections_msnweather_externalid": {
+            "defaultValue": "/subscriptions/1fcbb1ab-1178-46fc-8c5d-f0e20b65610d/resourceGroups/Temp/providers/Microsoft.Web/connections/msnweather",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_LogicAppIntTest_name')]",
+            "location": "uksouth",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "schema": {
+                                    "properties": {
+                                        "location": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Get_forecast_for_today": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['msnweather']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/forecast/today/@{encodeURIComponent(triggerBody()?['location'])}",
+                                "queries": {
+                                    "units": "Metric"
+                                }
+                            }
+                        },
+                        "Response": {
+                            "runAfter": {
+                                "Get_forecast_for_today": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Response",
+                            "kind": "Http",
+                            "inputs": {
+                                "body": "@body('Get_forecast_for_today')",
+                                "statusCode": 200
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "msnweather": {
+                                "connectionId": "[parameters('connections_msnweather_externalid')]",
+                                "connectionName": "msnweather",
+                                "id": "/subscriptions/1fcbb1ab-1178-46fc-8c5d-f0e20b65610d/providers/Microsoft.Web/locations/uksouth/managedApis/msnweather"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
