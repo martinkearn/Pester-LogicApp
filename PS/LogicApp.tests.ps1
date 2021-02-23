@@ -35,12 +35,14 @@ Describe "Logic App Integration Tests | UniqueId: $uniqueId" {
             "uniqueid"="$uniqueId";
         } | ConvertTo-Json
 
-        $postHeaders = @{
-            "Accept"="application/json"
-            "Content-Type"="application/json"
-        } 
+        $request = Invoke-RestMethod -Method 'POST' -Uri $env:LOGICAPPURI -Body $postBody -ContentType "application/json"
 
-        $request = Invoke-RestMethod -Method 'POST' -Uri $env:LOGICAPPURI -Body $postBody -Headers $postHeaders
+        Write-Host $request
+        Write-Host $request.responses.daily.day | ConvertTo-Json
+
+        It "Post request completed with 200" {
+            $request.StatusCode | Should -Be 200
+        }
     }
 
 }
