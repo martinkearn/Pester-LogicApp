@@ -1,15 +1,13 @@
 # Invoke with Invoke-Pester -Output Detailed LogicApp.tests.ps1
 
-BeforeAll { 
+BeforeDiscovery {
     # Include the utility file
     . "$PSScriptRoot\GetLogicAppActionResult.ps1"
 
     $uniqueId = New-Guid
 }
 
-
 Describe "Logic App Integration Tests | UniqueId: $uniqueId" {
-
     Context "Host machine has the environment variables setup correctly" {
         It "Expects LOGICAPPURI environment variables to be setup" {
             $env:LOGICAPPURI | Should -Not -BeNullOrEmpty
