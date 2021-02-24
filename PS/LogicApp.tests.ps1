@@ -1,9 +1,10 @@
 # Invoke with Invoke-Pester -Output Detailed LogicApp.tests.ps1
 
-BeforeDiscovery {
-    # Include the utility file
-    . "$PSScriptRoot\GetLogicAppActionResult.ps1"
+BeforeAll { 
+    . $PSScriptRoot/Utilities.ps1
+}
 
+BeforeDiscovery {
     # Load environment variables from local .env file by using Set-PsEnv
     if (-not (Get-Module -ListAvailable -Name Set-PsEnv)) {
         Install-Module -Name Set-PsEnv -Force
@@ -39,13 +40,21 @@ Describe "Logic App Integration Tests | UniqueId: $uniqueId" {
                 uniqueid = $uniqueId
             } | ConvertTo-Json
 
-            $response = Invoke-WebRequest -Method POST -Uri $env:LOGICAPPURI -Body $postBody -ContentType "application/json"
+            $postResponse = Invoke-WebRequest -Method POST -Uri $env:LOGICAPPURI -Body $postBody -ContentType "application/json"
+            $location = $postResponse.Headers.Location
         }
 
-        It "Post request completed with 200" {
-            $response.StatusCode | Should -Be 200
+        It "Has responded with a 20x status code" {
+            if ($location -ne $null)
+            {
+                $postResponse.StatusCode | Should -Be 202
+                $result = Wait-ForLogicAppToComplete -LogicappUri $location -TimeoutMinutes 10
+                $result.StatusCode | Should -Be 200
+            }
+            else {
+                $postResponse.StatusCode | Should -Be 200
+            }
         }
-
     }
 
 }

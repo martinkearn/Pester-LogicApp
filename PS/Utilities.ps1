@@ -66,3 +66,30 @@ function Get-LogicAppActionResult {
 
     throw "Timeout for $UniqueId"
 }
+
+function Wait-ForLogicAppToComplete {
+    param (
+        [parameter(Mandatory = $true)] [string] $LogicAppUri,
+        [parameter(Mandatory = $true)] [int] $TimeoutMinutes
+    )
+
+    $startDate = Get-Date
+
+    do {
+        $response = Invoke-WebRequest -Method GET -Uri $LogicAppUri
+
+        if ($response.StatusCode -ge 500) {
+            throw "LogicApp GET $LogicAppUri returned error status code $($response.StatusCode)"
+        }
+        
+        if ($response.StatusCode -eq 200) {
+            return $response
+        }
+
+        Start-Sleep -s 10
+    } while ($startDate.AddMinutes($TimeoutMinutes) -gt (Get-Date))
+}
+
+function HelloWorld {
+    Write-Host "hello world"
+}
