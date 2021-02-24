@@ -33,27 +33,25 @@ Describe "Logic App Integration Tests | UniqueId: $uniqueId" {
     }
 
     Context "Trigger the logic app and test the results" {
-
         BeforeAll { 
             $postBody = @{
                 location = "London"
                 uniqueid = $uniqueId
             } | ConvertTo-Json
-
-            $postResponse = Invoke-WebRequest -Method POST -Uri $env:LOGICAPPURI -Body $postBody -ContentType "application/json"
-            $location = $postResponse.Headers.Location
+            $response = Invoke-WebRequest -Method POST -Uri $env:LOGICAPPURI -Body $postBody -ContentType "application/json"
+            $locationHeader = $response.Headers.Location
         }
-
-        It "Has responded with a 20x status code" {
-            if ($location -ne $null)
+        It "Has sucessfully completed" {
+            if ($locationHeader -ne $null)
             {
-                $postResponse.StatusCode | Should -Be 202
-                $result = Wait-ForLogicAppToComplete -LogicappUri $location -TimeoutMinutes 10
-                $result.StatusCode | Should -Be 200
+                # This means that async repsonses are enabled on the Logic App so we expect an initial 202 with a header called 'location' containing a uri to get final status.
+                $response.StatusCode | Should -Be 202
+                # Wait until the uri on the 'location' header eventually returns 200, then overwrite the initial response with the final one.
+                $response = Wait-ForLogicAppToComplete -LogicappUri $locationHeader -TimeoutMinutes 10
             }
-            else {
-                $postResponse.StatusCode | Should -Be 200
-            }
+
+            # Both async and non-async should eventually have a 200 status code.
+            $response.StatusCode | Should -Be 200
         }
     }
 
