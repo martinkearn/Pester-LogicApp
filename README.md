@@ -9,3 +9,10 @@ The test is setup to work with this logic app.
  ![The logic app overview](https://github.com/martinkearn/Pester-LogicApp/raw/main/Logic%20App%20Template/LogicAppOverview.jpg)
  
 You can deploy this on your own Azure subscription using the template in [/Logic App Template](https://github.com/martinkearn/Pester-LogicApp/tree/main/Logic%20App%20Template). For detail on how to do that, see [Deploy Azure Resource Manager templates for Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-deploy-azure-resource-manager-templates).
+
+## Pester
+This test is designed to use [Pester V5](https://pester.dev/).
+
+To get an overview of Pester, see these resources:
+- [Pester Docs > Quick Start](https://pester.dev/docs/quick-start)
+- [Integration testing with Pester and PowerShell](http://martink.me/articles/integration-testing-with-pester-and-powershell)
