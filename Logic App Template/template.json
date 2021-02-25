@@ -38,6 +38,9 @@
                                     "properties": {
                                         "location": {
                                             "type": "string"
+                                        },
+                                        "uniqueid": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
