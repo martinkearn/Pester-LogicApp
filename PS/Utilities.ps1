@@ -27,7 +27,7 @@ function Get-LogicAppActionResult {
             # Get the output link doucment content. Get-AzlogicAppRunHistory just gives us a link to a json document which contains the output links, therefore we have to go and get the json document seperately.
             $outputLinksContent = (Invoke-WebRequest -Method 'GET' -Uri $run.Trigger.OutputsLink.Uri).Content | ConvertFrom-Json
 
-            # For very large outputs, the content is base 63 encoded. Use this to decode body from base 64 string, overriding the $outputLinksContent
+            # For very large outputs, the content is base 64 encoded. Use this to decode body from base 64 string, overriding the $outputLinksContent
             #$outputLinksContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($outputLinksContent.body.ContentData)) | ConvertFrom-Json
 
             # Check that the run is the one we are looking for by matching uniqueId to the passed in parameter
