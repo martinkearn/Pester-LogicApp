@@ -11,8 +11,20 @@ The test is setup to work with this logic app.
 You can deploy this on your own Azure subscription using the template in [/Logic App Template](https://github.com/martinkearn/Pester-LogicApp/tree/main/Logic%20App%20Template). For detail on how to do that, see [Deploy Azure Resource Manager templates for Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-deploy-azure-resource-manager-templates).
 
 ## Pester
-This test is designed to use [Pester V5](https://pester.dev/).
-
-To get an overview of Pester, see these resources:
+This test is designed to use [Pester V5](https://pester.dev/). To get an overview of Pester, see these resources:
 - [Pester Docs > Quick Start](https://pester.dev/docs/quick-start)
 - [Integration testing with Pester and PowerShell](http://martink.me/articles/integration-testing-with-pester-and-powershell)
+
+## Setup & Usage
+To run the test
+1. Clone this repository
+2. Deploy the logic app detailed above
+3. Make a copy of [/ps/sample.env](https://github.com/martinkearn/Pester-LogicApp/blob/main/PS/sample.env) named `.env` and fill in eth values ot match your deployed Logic App
+4. Open a PowerShell console and navigate to the folder containing `LogicApp.tests.ps1`
+5. Run this commmand
+
+```PowerShell
+Invoke-Pester -Output Detailed LogicApp.tests.ps1
+```
+
+6. If sucessfull, 6 tests should have passed
