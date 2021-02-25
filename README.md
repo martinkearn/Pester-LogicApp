@@ -3,7 +3,7 @@ This is a sample showing how to use Pester and PowerShell to integration test a 
 
 The sample uses a very simple logic app that gets a weather report using the MSN Weather connector. The main purpose of the repository is to demonstrator how to use Pester and PowerShell to perform integration tests on Logic Apps.
 
-For more detail about the principles in this sample and what bebefits they offer, see this article: http://martink.me/articles/integration-testing-logic-apps
+For more detail about the principles in this sample, see this article: http://martink.me/articles/integration-testing-logic-apps
 
 ## The Logic App
 The test is setup to work with this logic app.
