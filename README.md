@@ -18,8 +18,8 @@ This test is designed to use [Pester V5](https://pester.dev/). To get an overvie
 ## Setup & Usage
 To run the test
 1. Clone this repository
-2. Deploy the logic app detailed above
-3. Make a copy of [/ps/sample.env](https://github.com/martinkearn/Pester-LogicApp/blob/main/PS/sample.env) named `.env` and fill in eth values ot match your deployed Logic App
+2. Deploy the [/Logic App Template](https://github.com/martinkearn/Pester-LogicApp/tree/main/Logic%20App%20Template). For detail on how to do that, see [Deploy Azure Resource Manager templates for Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-deploy-azure-resource-manager-templates).
+3. Make a copy of [/ps/sample.env](https://github.com/martinkearn/Pester-LogicApp/blob/main/PS/sample.env) named `.env` and fill in the values to match your deployed Logic App
 4. Open a PowerShell console and navigate to the folder containing `LogicApp.tests.ps1`
 5. Run this commmand
 
