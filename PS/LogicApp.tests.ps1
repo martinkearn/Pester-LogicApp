@@ -62,6 +62,8 @@ Context "Trigger the logic app" {
     Context "Check the result of the logic app" {
         
         BeforeAll {
+            $actionResult = Get-LogicAppActionResult -ActionName "Response" -UniqueId "$uniqueId" -ResourceGroupName $env:RESOURCEGROUPNAME -LogicAppName $env:LOGICAPPNAME
+            # $actionResult is an object that contains .Response which is the json document that the action returns and .Run which is the Logic App run history
         }
 
         It "Is a forecast for GB" {
