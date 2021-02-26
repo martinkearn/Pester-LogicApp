@@ -67,9 +67,11 @@ Context "Trigger the logic app" {
         }
 
         It "Is a forecast for GB" {
+            $actionResult.Response.body.responses.source.countryCode | Should -Be "GB"
         }
 
         It "Is a forecast for London" {
+            $actionResult.Response.body.responses.source.location | Should -Be "London, London, United Kingdom"
         }
     }
 

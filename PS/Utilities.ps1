@@ -41,19 +41,19 @@ function Get-LogicAppActionResult {
                 # If the run succeeded then we can check the output
                 if ($run.Status -eq "Succeeded") {
 
-                    # We have a matching run. Get the output from the specified action
-                    $actionResult = Get-AzLogicAppRunAction -ResourceGroupName $ResourceGroupName -Name $LogicAppName -RunName $run.Name -ActionName $ActionName
-                    if ($null -ne $actionResult.OutputsLink.Uri) 
-                    {
-                        $actionResultContent = (Invoke-WebRequest -Method 'GET' -Uri $actionResult.OutputsLink.Uri).Content | ConvertFrom-Json
-                    } else {
-                        throw "LogicApp run action $ActionName had no content"
-                    }
+# We have a matching run. Get the output from the specified action
+$actionResult = Get-AzLogicAppRunAction -ResourceGroupName $ResourceGroupName -Name $LogicAppName -RunName $run.Name -ActionName $ActionName
+if ($null -ne $actionResult.OutputsLink.Uri) 
+{
+    $actionResultContent = (Invoke-WebRequest -Method 'GET' -Uri $actionResult.OutputsLink.Uri).Content | ConvertFrom-Json
+} else {
+    throw "LogicApp run action $ActionName had no content"
+}
 
-                    return @{
-                        Response = $actionResultContent;
-                        Run      = $run;
-                    }
+return @{
+    Response = $actionResultContent;
+    Run      = $run;
+}
                 }
             }
         }
