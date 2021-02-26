@@ -89,7 +89,3 @@ function Wait-ForLogicAppToComplete {
         Start-Sleep -s 10
     } while ($startDate.AddMinutes($TimeoutMinutes) -gt (Get-Date))
 }
-
-function HelloWorld {
-    Write-Host "hello world"
-}
