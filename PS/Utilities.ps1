@@ -24,7 +24,7 @@ function Get-LogicAppActionResult {
                 continue;
             }
 
-            # Get the output link doucment content. Get-AzlogicAppRunHistory just gives us a link to a json document which contains the output links, therefore we have to go and get the json document seperately.
+            # Get the output link document content. Get-AzlogicAppRunHistory just gives us a link to a json document which contains the output links, therefore we have to go and get the json document seperately.
             $outputLinksContent = (Invoke-WebRequest -Method 'GET' -Uri $run.Trigger.OutputsLink.Uri).Content | ConvertFrom-Json
 
             # For very large outputs, the content is base 64 encoded. Use this to decode body from base 64 string, overriding the $outputLinksContent
@@ -41,19 +41,19 @@ function Get-LogicAppActionResult {
                 # If the run succeeded then we can check the output
                 if ($run.Status -eq "Succeeded") {
 
-# We have a matching run. Get the output from the specified action
-$actionResult = Get-AzLogicAppRunAction -ResourceGroupName $ResourceGroupName -Name $LogicAppName -RunName $run.Name -ActionName $ActionName
-if ($null -ne $actionResult.OutputsLink.Uri) 
-{
-    $actionResultContent = (Invoke-WebRequest -Method 'GET' -Uri $actionResult.OutputsLink.Uri).Content | ConvertFrom-Json
-} else {
-    throw "LogicApp run action $ActionName had no content"
-}
+                    # We have a matching run. Get the output from the specified action
+                    $actionResult = Get-AzLogicAppRunAction -ResourceGroupName $ResourceGroupName -Name $LogicAppName -RunName $run.Name -ActionName $ActionName
+                    if ($null -ne $actionResult.OutputsLink.Uri) 
+                    {
+                        $actionResultContent = (Invoke-WebRequest -Method 'GET' -Uri $actionResult.OutputsLink.Uri).Content | ConvertFrom-Json
+                    } else {
+                        throw "LogicApp run action $ActionName had no content"
+                    }
 
-return @{
-    Response = $actionResultContent;
-    Run      = $run;
-}
+                    return @{
+                        Response = $actionResultContent;
+                        Run      = $run;
+                    }
                 }
             }
         }
